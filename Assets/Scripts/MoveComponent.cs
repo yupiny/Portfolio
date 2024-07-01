@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum EvadeDirection
+{
+    Forward, Backward, Left, Right,
+}
+
 public class MoveComponent : MonoBehaviour
 {
     [SerializeField]
@@ -10,34 +15,32 @@ public class MoveComponent : MonoBehaviour
     private float runSpeed = 4.0f;
 
     [SerializeField]
-    private float sensitivitiy = 10.0f;
+    private float sensitivity = 10.0f;
 
     [SerializeField]
     private float deadZone = 0.001f;
 
     private bool bCanMove = true;
-
     private Animator animator;
     private CharacterController controller;
+    //private WeaponComponent weapon;
 
     private Vector2 inputMove;
+    public Vector2 MoveValue { get => inputMove; }
     private Vector2 currInputMove;
-
-    public bool bRun;
-    public void Move()
-    {
-        bCanMove = true;
-    }
-    public void Stop()
-    {
-        bCanMove = false;
-    }
+    private bool bRun;
+    private Vector2 velocity;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+      //  weapon = GetComponent<WeaponComponent>();
 
+        // 1. PlayerInput 컴포넌트를 가져오기
+        // 2. PlayerInput 컴포넌트의 ActionMap 가져오기
+        // 3. ActionMap에서 Binding한 것 가져오기
+        // 4. Bind의 event에 메서드 연결하기
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
@@ -50,13 +53,23 @@ public class MoveComponent : MonoBehaviour
         runAction.canceled += Input_Run_Cancled;
     }
 
+    public void Move()
+    {
+        bCanMove = true;
+    }
+    public void Stop()
+    {
+        bCanMove = false;
+    }
+
     private void Input_Move_Performed(InputAction.CallbackContext context)
     {
         inputMove = context.ReadValue<Vector2>();
     }
+
     private void Input_Move_Cancled(InputAction.CallbackContext context)
     {
-        inputMove = Vector3.zero;
+        inputMove = Vector2.zero;
     }
 
     private void Input_Run_Started(InputAction.CallbackContext context)
@@ -69,10 +82,9 @@ public class MoveComponent : MonoBehaviour
         bRun = false;
     }
 
-    private Vector2 velocity;
     private void Update()
     {
-        currInputMove = Vector2.SmoothDamp(currInputMove, inputMove, ref velocity, 1.0f / sensitivitiy);
+        currInputMove = Vector2.SmoothDamp(currInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
         if (bCanMove == false)
             return;
@@ -82,22 +94,27 @@ public class MoveComponent : MonoBehaviour
         float speed = bRun ? runSpeed : walkSpeed;
         if (currInputMove.magnitude > deadZone)
         {
-
-            Debug.Log("speed" + bRun);
-
             direction = (Vector3.right * currInputMove.x) + (Vector3.forward * currInputMove.y);
             direction = direction.normalized * speed;
         }
         controller.Move(direction * Time.deltaTime);
 
         //if (weapon.UnarmedMode)
-        {
+        //{
             animator.SetFloat("SpeedY", direction.magnitude);
 
-            //return;
-        }
+        //    return;
+       // }
 
-        //animator.SetFloat("SpeedX", currInputMove.x * speed);
-        //animator.SetFloat("SpeedY", currInputMove.y * speed);
+       // animator.SetFloat("SpeedX", currInputMove.x * speed);
+       // animator.SetFloat("SpeedY", currInputMove.y * speed);
+    }
+
+
+    private void OnGUI()
+    {
+        GUI.color = Color.red;
+        GUILayout.Label(inputMove.ToString());
+        //GUILayout.Label(currInputMove.ToString());
     }
 }
