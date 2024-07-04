@@ -102,8 +102,8 @@ public class Melee : Weapon
 
         //IDamagable damage = other.gameObject.GetComponent<IDamagable>();
 
-        if (damage == null)
-            return;
+        //if (damage == null)
+        //    return;
 
         Vector3 hitPoint = Vector3.zero;
 
@@ -126,7 +126,7 @@ public class Melee : Weapon
         //temp.transform.localPosition = new Vector3(0.25f, 0.25f, 0.25f);
 
         //print(other.gameObject.name);
-
-        damage.OnDamage(rootObject, this, hitPoint, doActionDatas[index]);
+        //
+        //damage.OnDamage(rootObject, this, hitPoint, doActionDatas[index]);
     }
 }

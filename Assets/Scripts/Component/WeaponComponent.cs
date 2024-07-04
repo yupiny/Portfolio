@@ -35,15 +35,6 @@ public class WeaponComponent : MonoBehaviour
 
     private Dictionary<WeaponType, Weapon> weaponTable;
 
-    //private Weapon GetWeapon(WeaponType type)
-    //{
-    //    GameObject obj;
-
-    //    if (weaponTable.TryGetValue(type, out obj))
-    //        return obj.GetComponent<Weapon>();
-
-    //    return null;
-    //}
     private void Start()
     {
         weaponTable= new Dictionary<WeaponType, Weapon>();
