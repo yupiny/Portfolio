@@ -7,13 +7,14 @@ using StateType = StateComponent.StateType;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(StateComponent))]
 [RequireComponent(typeof(MoveComponent))]
+[RequireComponent(typeof(WeaponComponent))]
 public class Player : MonoBehaviour
 {
     private Animator animator;
 
     private MoveComponent moving;
     private StateComponent state;
-    
+    private WeaponComponent weapon;
 
     /// <summary>
     /// Evade시 변경된 회전 값을 복구하기 위한 prev 값 저장
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         state = GetComponent<StateComponent>();
         moving = GetComponent<MoveComponent>();
-        
+        weapon = GetComponent<WeaponComponent>();
 
         state.OnStateTypeChanged += OnStateTypeChanged;
 
@@ -40,6 +41,11 @@ public class Player : MonoBehaviour
                 return;*/
 
             state.SetEvadeMode();
+        };
+
+        actionMap.FindAction("Sword").started += context =>
+        {
+            weapon.SetSwordMode();
         };
 
 

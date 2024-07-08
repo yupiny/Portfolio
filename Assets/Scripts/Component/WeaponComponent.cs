@@ -55,7 +55,7 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
-    public void SetFistMode() //2번을 누를때마다 호출
+    public void SetFistMode() //1번을 누를때마다 호출
     {
         if (state.IdleMode == false)
             return;

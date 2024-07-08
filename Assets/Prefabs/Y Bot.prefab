@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1662647391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1662647392}
+  m_Layer: 0
+  m_Name: Hand_Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1662647392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662647391}
+  m_LocalRotation: {x: -0.11408757, y: -0.08212647, z: -0.7315673, w: 0.6671197}
+  m_LocalPosition: {x: -0.039, y: 0, z: 0.048}
+  m_LocalScale: {x: 0.99999976, y: 1, z: 1.0000001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1242281224403813610}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -15.806, y: 3.417, z: -95.751}
 --- !u!1 &52971445015885750
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,6 +569,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4430347120288033064}
+  - {fileID: 1662647392}
   m_Father: {fileID: 4148122271926953665}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2144,6 +2176,7 @@ GameObject:
   - component: {fileID: 1727592820847805697}
   - component: {fileID: 7685068919877037750}
   - component: {fileID: 7685068919877037746}
+  - component: {fileID: 5728947003020757534}
   m_Layer: 0
   m_Name: Y Bot
   m_TagString: Untagged
@@ -2285,11 +2318,29 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: e48d765f-dc9c-4124-aa76-e87fc482e0c3
     m_ActionName: Player/Evade
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 38930ab1-3f05-4757-88da-7ed2535f9400
+    m_ActionName: Player/Sword[/Keyboard/2]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Popo
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5728947003020757534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028821084305886803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca804c653c041ea4fa2bca8e001c1fff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originPrefabs:
+  - {fileID: 1711279095464942, guid: cc31703559a91754cb70f161ca2a9b58, type: 3}
 --- !u!1 &8158273657622643951
 GameObject:
   m_ObjectHideFlags: 0
