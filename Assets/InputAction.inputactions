@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Staff",
+                    "type": "Button",
+                    "id": "a1c1261a-cdc8-4f7e-9751-1dcb13b8cd59",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -128,6 +137,17 @@
                     "processors": "",
                     "groups": "Popo",
                     "action": "Sword",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "896aef99-df7d-4623-aaee-ff52b945ce77",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Popo",
+                    "action": "Staff",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

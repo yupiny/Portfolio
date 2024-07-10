@@ -7,7 +7,7 @@ public class Sword : Melee
 {
     // 손 오브젝트의 이름을 저장하는 변수
     [SerializeField]
-    private string handName = "Hand_Sword";
+    private string swordHandName = "Hand_Sword";
 
     // 검이 붙을 손의 Transform을 저장하는 변수.
     private Transform handTransform;
@@ -26,13 +26,11 @@ public class Sword : Melee
         base.Start();
 
         // handName에 해당하는 이름을 가진 자식을 찾아 handTransform에 저장
-        handTransform = rootObject.transform.FindChildByName(handName);
+        handTransform = rootObject.transform.FindChildByName(swordHandName);
         Debug.Assert(handTransform != null); // handTransform이 null이 아닌지 확인
+        transform.SetParent(handTransform, false); // 현재 검의 Transform을 handTransform의 자식으로 설정하고, 로컬 좌표를 유지
 
-        // 현재 검의 Transform을 handTransform의 자식으로 설정하고, 로컬 좌표를 유지
-        transform.SetParent(handTransform, false);
-
-        // 검 게임 오브젝트를 비활성화합니다.
+        // 검 게임 오브젝트 비활성화
         gameObject.SetActive(false);
     }
 
@@ -41,7 +39,7 @@ public class Sword : Melee
     {
         base.Begin_Equip();
 
-        // 검 게임 오브젝트를 활성화
+        // 검 게임 오브젝트 활성화
         gameObject.SetActive(true);
     }
 

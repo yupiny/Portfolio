@@ -70,14 +70,6 @@ public class WeaponComponent : MonoBehaviour
         SetMode(WeaponType.Sword);
     }
 
-    //public void SetHammerMode() //3번을 누를때마다 호출
-    //{
-    //    if (state.IdleMode == false)
-    //        return;
-
-    //    SetMode(WeaponType.Hammer);
-    //}
-
     public void SetStaffMode() //3번을 누를때마다 호출
     {
         if (state.IdleMode == false)
