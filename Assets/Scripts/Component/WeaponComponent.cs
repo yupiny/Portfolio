@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum WeaponType
 {
-    Unarmed = 0, Fist, Sword, Hammer, FireBall, Max
+    Unarmed = 0, Fist, Sword, Staff, Max
 }
 
 public class WeaponComponent : MonoBehaviour
@@ -24,8 +24,7 @@ public class WeaponComponent : MonoBehaviour
     public bool UnarmedMode { get => type == WeaponType.Unarmed; }
     public bool FistMode { get => type == WeaponType.Fist; }
     public bool SwordMode { get => type == WeaponType.Sword; }
-    public bool HammerMode { get => type == WeaponType.Hammer; }
-    public bool FireBallMode { get => type == WeaponType.FireBall; }
+    public bool StaffMode { get => type == WeaponType.Staff; }
 
     private void Awake()
     {
@@ -71,20 +70,20 @@ public class WeaponComponent : MonoBehaviour
         SetMode(WeaponType.Sword);
     }
 
-    public void SetHammerMode() //3번을 누를때마다 호출
+    //public void SetHammerMode() //3번을 누를때마다 호출
+    //{
+    //    if (state.IdleMode == false)
+    //        return;
+
+    //    SetMode(WeaponType.Hammer);
+    //}
+
+    public void SetStaffMode() //3번을 누를때마다 호출
     {
         if (state.IdleMode == false)
             return;
 
-        SetMode(WeaponType.Hammer);
-    }
-
-    public void SetFireBallMode() //3번을 누를때마다 호출
-    {
-        if (state.IdleMode == false)
-            return;
-
-        SetMode(WeaponType.FireBall);
+        SetMode(WeaponType.Staff);
     }
 
     private void SetUnarmedMode()
