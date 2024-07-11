@@ -48,6 +48,11 @@ public class Player : MonoBehaviour
             weapon.SetSwordMode();
         };
 
+        actionMap.FindAction("Staff").started += context =>
+        {
+            weapon.SetStaffMode();
+        };
+
 
     }
 
