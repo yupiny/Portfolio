@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static StateComponent;
 
 public enum EvadeDirection
 {
-    Forward, Backward, Left, Right,
+    Forward, Backward, Left, Right, forwardRight, forwardLeft, backwardLeft, backwardRight
 }
 
 public class MoveComponent : MonoBehaviour
@@ -31,6 +33,11 @@ public class MoveComponent : MonoBehaviour
     private bool bRun;
     private Vector2 velocity;
 
+    private StateComponent state;
+    /// <summary>
+    /// Evade시 변경된 회전 값을 복구하기 위한 prev 값 저장
+    /// </summary>
+    private Quaternion? evadeRotation = null;
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -51,6 +58,9 @@ public class MoveComponent : MonoBehaviour
         InputAction runAction = actionMap.FindAction("Run");
         runAction.started += Input_Run_Started;
         runAction.canceled += Input_Run_Cancled;
+
+        state = GetComponent<StateComponent>();
+        state.OnStateTypeChanged += OnStateTypeChanged;
     }
 
     public void Move()
@@ -110,6 +120,103 @@ public class MoveComponent : MonoBehaviour
        // animator.SetFloat("SpeedY", currInputMove.y * speed);
     }
 
+
+    //플레이어 상태가 변경되면 호출됨.
+    private void OnStateTypeChanged(StateType prevType, StateType newType)
+    {
+        switch (newType)
+        {
+            case StateType.Evade:
+                {
+                    ExecuteEvade();
+                }
+                break;
+        }
+    }
+
+    private void ExecuteEvade()
+    {
+        Vector2 value = MoveValue;
+        EvadeDirection direction = EvadeDirection.Forward;
+
+        // 키 입력이 없는 경우
+        if (value.y == 0.0f)
+        {
+            direction = EvadeDirection.Forward;
+
+            if (value.x < 0.0f) //왼쪽
+            {
+                direction = EvadeDirection.Left;
+            }
+            else if (value.x > 0.0f) //오른쪽
+            {
+                direction = EvadeDirection.Right;
+            }
+        }
+        // 앞 입력 시
+        else if (value.y >= 0.0f)
+        {
+            direction = EvadeDirection.Forward;
+            if (value.x < 0.0f) //왼쪽 앞 대각선
+            {
+                evadeRotation = transform.rotation;
+                transform.Rotate(Vector3.up, -45.0f);
+            }
+            else if (value.x > 0.0f) //오른쪽 앞 대각선
+            {
+                evadeRotation = transform.rotation;
+                transform.Rotate(Vector3.up, 45.0f);
+            }
+        }
+        else
+        {
+            direction = EvadeDirection.Backward;
+            if (value.x < 0.0f) //왼쪽 뒤 대각선
+            {
+                evadeRotation = transform.rotation;
+                transform.Rotate(Vector3.up, 45.0f);
+            }
+            else if (value.x > 0.0f) //오른쪽 뒤 대각선
+            {
+                evadeRotation = transform.rotation;
+                transform.Rotate(Vector3.up, -45.0f);
+            }
+        }
+        animator.SetInteger("Direction", (int)direction);
+        animator.SetTrigger("Evade");
+    }
+
+    public void Evade()
+    {
+        End_Evade();
+    }
+    private void End_Evade()
+    {
+        if (evadeRotation.HasValue)
+            StartCoroutine(Reset_EvadeRotation());
+
+        state.SetIdleMode();
+    }
+
+    private IEnumerator Reset_EvadeRotation()
+    {
+        float delta = 0.0f;
+
+        while (true)
+        {
+            float angle = Quaternion.Angle(transform.rotation, evadeRotation.Value);
+            if (angle < 2.0f)
+                break;
+
+            delta += Time.deltaTime * 50f;
+            Quaternion rotate = Quaternion.RotateTowards(transform.rotation, evadeRotation.Value, delta);
+            transform.rotation = rotate;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        transform.rotation = evadeRotation.Value;
+    }
 
     private void OnGUI()
     {
