@@ -17,15 +17,13 @@ public class MoveComponent : MonoBehaviour
     private float runSpeed = 4.0f;
 
     [SerializeField]
-    private float sensitivity = 10.0f;
+    private float sensitivity = 30.0f;
 
     [SerializeField]
     private float deadZone = 0.001f;
 
     private bool bCanMove = true;
     private Animator animator;
-    private CharacterController controller;
-    //private WeaponComponent weapon;
 
     private Vector2 inputMove;
     public Vector2 MoveValue { get => inputMove; }
@@ -34,15 +32,15 @@ public class MoveComponent : MonoBehaviour
     private Vector2 velocity;
 
     private StateComponent state;
+    private Renderer[] renderers; //캐릭터 메쉬배열로 저장
+
     /// <summary>
     /// Evade시 변경된 회전 값을 복구하기 위한 prev 값 저장
     /// </summary>
     private Quaternion? evadeRotation = null;
     private void Awake()
     {
-        controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-      //  weapon = GetComponent<WeaponComponent>();
 
         // 1. PlayerInput 컴포넌트를 가져오기
         // 2. PlayerInput 컴포넌트의 ActionMap 가져오기
@@ -107,17 +105,18 @@ public class MoveComponent : MonoBehaviour
             direction = (Vector3.right * currInputMove.x) + (Vector3.forward * currInputMove.y);
             direction = direction.normalized * speed;
         }
-        controller.Move(direction * Time.deltaTime);
+
+        transform.Translate(direction * Time.deltaTime);
 
         //if (weapon.UnarmedMode)
         //{
-            animator.SetFloat("SpeedY", direction.magnitude);
+            //animator.SetFloat("SpeedY", direction.magnitude);
 
         //    return;
-       // }
+        // }
 
-       // animator.SetFloat("SpeedX", currInputMove.x * speed);
-       // animator.SetFloat("SpeedY", currInputMove.y * speed);
+        animator.SetFloat("SpeedX", currInputMove.x * speed);
+        animator.SetFloat("SpeedY", currInputMove.y * speed);
     }
 
 
@@ -184,7 +183,74 @@ public class MoveComponent : MonoBehaviour
         }
         animator.SetInteger("Direction", (int)direction);
         animator.SetTrigger("Evade");
+
+        //만약 스태프라면
+        if (animator.GetInteger("WeaponType") == (int)WeaponType.Staff)
+        {
+            StaffEvade(direction);
+        }
     }
+
+    [SerializeField]
+    private float telpoDistance = 5.0f;
+    private void StaffEvade(EvadeDirection direction)
+    {
+        // 1. 방향 받았으니까, 목적지를 구한다
+        // 0 : 앞, 1 : 뒤, 2: 왼쪽, 3: 오른쪽
+        Vector3 destnation = transform.position;
+
+        if (direction == EvadeDirection.Forward)
+            destnation += new Vector3(0, 0, +telpoDistance);
+        
+        if (direction == EvadeDirection.Backward)
+            destnation += new Vector3(0, 0, -telpoDistance);
+
+        if (direction == EvadeDirection.Right)
+            destnation += new Vector3(+telpoDistance, 0, 0);
+
+        if (direction == EvadeDirection.Left)
+            destnation += new Vector3(-telpoDistance, 0, 0);
+
+
+        // 파티클 생성 코드 작성할 것 함수 X
+        //GameObject.Instantiate<GameObject>(파티클이름,)
+
+        StartCoroutine(performTelpo(destnation));
+    }
+
+
+    IEnumerator performTelpo(Vector3 dest)
+    {
+        sensitivity = 50f;
+        renderers = GetComponentsInChildren<Renderer>();
+        foreach(Renderer renderer in renderers)
+        {   
+            //메쉬 끄기
+            renderer.enabled = false;
+        }
+
+        while(Vector3.Distance(transform.position, dest) > 0.01f) // 만약 목적지에 근접하면 코루틴 탈출
+        {
+            //자기위치, 목표위치, 이동속도 줘서 자기위치에 넣어줌(이동)
+            transform.position = Vector3.MoveTowards(transform.position, dest, 10.0f * Time.deltaTime); // moveToward를 통해서 위치를 얻은걸로 이동
+            yield return null; //1프레임 멈춤
+        }
+
+
+        foreach (Renderer renderer in renderers)
+        {
+            //메쉬 전부 키기
+            renderer.enabled = true;
+        }
+
+        
+        animator.SetTrigger("ReturnToBlendTree");
+        Move();
+        End_Evade();
+        sensitivity = 30f;
+    }
+
+
 
     public void Evade()
     {

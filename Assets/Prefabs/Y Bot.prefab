@@ -935,14 +935,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3525290260853628695}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.0878572, y: 0.01641414, z: 0.5686339, w: 0.8177208}
+  m_LocalPosition: {x: 0.037, y: 0.08, z: 0.044}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8798027232718015690}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 87.463}
 --- !u!1 &3834527220505989459
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,7 +2258,6 @@ GameObject:
   - component: {fileID: 3020644169734958937}
   - component: {fileID: 1449891374076414183}
   - component: {fileID: 1727592820847805697}
-  - component: {fileID: 7685068919877037750}
   - component: {fileID: 7685068919877037746}
   - component: {fileID: 5728947003020757534}
   m_Layer: 0
@@ -2324,6 +2323,7 @@ MonoBehaviour:
   runSpeed: 4
   sensitivity: 10
   deadZone: 0.001
+  telpoDistance: 5
 --- !u!114 &1449891374076414183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2348,24 +2348,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7609f570de71e21468cef9035bdd40c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!143 &7685068919877037750
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8028821084305886803}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1.8
-  m_Radius: 0.4
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &7685068919877037746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2407,6 +2389,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 38930ab1-3f05-4757-88da-7ed2535f9400
     m_ActionName: Player/Sword[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a1c1261a-cdc8-4f7e-9751-1dcb13b8cd59
+    m_ActionName: Player/Staff[/Keyboard/3]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Popo
   m_DefaultActionMap: Player
@@ -2426,6 +2412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originPrefabs:
   - {fileID: 1711279095464942, guid: cc31703559a91754cb70f161ca2a9b58, type: 3}
+  - {fileID: 6759754029706040241, guid: 0287a6f5a8f7f314c8b700825d478e49, type: 3}
 --- !u!1 &8158273657622643951
 GameObject:
   m_ObjectHideFlags: 0
