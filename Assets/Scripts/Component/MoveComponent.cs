@@ -222,6 +222,7 @@ public class MoveComponent : MonoBehaviour
     IEnumerator performTelpo(Vector3 dest)
     {
         sensitivity = 50f;
+        //yield return new WaitForSeconds(0.1f);
         renderers = GetComponentsInChildren<Renderer>();
         foreach(Renderer renderer in renderers)
         {   
