@@ -2323,6 +2323,7 @@ MonoBehaviour:
   runSpeed: 4
   sensitivity: 10
   deadZone: 0.001
+  TelpoEffect: {fileID: 0}
   telpoDistance: 5
 --- !u!114 &1449891374076414183
 MonoBehaviour:

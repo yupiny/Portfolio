@@ -34,6 +34,9 @@ public class MoveComponent : MonoBehaviour
     private StateComponent state;
     private Renderer[] renderers; //캐릭터 메쉬배열로 저장
 
+    [SerializeField]
+    private GameObject TelpoEffect;
+
     /// <summary>
     /// Evade시 변경된 회전 값을 복구하기 위한 prev 값 저장
     /// </summary>
@@ -211,9 +214,10 @@ public class MoveComponent : MonoBehaviour
         if (direction == EvadeDirection.Left)
             destnation += new Vector3(-telpoDistance, 0, 0);
 
-
+        Vector3 playerPosition = transform.position;
         // 파티클 생성 코드 작성할 것 함수 X
-        //GameObject.Instantiate<GameObject>(파티클이름,)
+        GameObject telpoEffect = GameObject.Instantiate<GameObject>(TelpoEffect, transform.position, Quaternion.identity);
+        Destroy(telpoEffect, 2f);
 
         StartCoroutine(performTelpo(destnation));
     }

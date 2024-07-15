@@ -428,6 +428,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3020644169734958937, guid: fb57f2b22007c3d4998225428166f9e9, type: 3}
+      propertyPath: TelpoEffect
+      value: 
+      objectReference: {fileID: 4925974917851401304, guid: ad276d981dc41d54bb8d941bcef064a9, type: 3}
+    - target: {fileID: 3020644169734958937, guid: fb57f2b22007c3d4998225428166f9e9, type: 3}
       propertyPath: sensitivity
       value: 30
       objectReference: {fileID: 0}
