@@ -118,8 +118,8 @@ public class MoveComponent : MonoBehaviour
         //    return;
         // }
 
-        animator.SetFloat("SpeedX", currInputMove.x * speed);
-        animator.SetFloat("SpeedY", currInputMove.y * speed);
+        animator.SetFloat("SpeedX", direction.x * speed);
+        animator.SetFloat("SpeedY", direction.z * speed);
     }
 
 
@@ -217,7 +217,7 @@ public class MoveComponent : MonoBehaviour
         Vector3 playerPosition = transform.position;
         // 파티클 생성 코드 작성할 것 함수 X
         GameObject telpoEffect = GameObject.Instantiate<GameObject>(TelpoEffect, transform.position, Quaternion.identity);
-        Destroy(telpoEffect, 2f);
+        telpoEffect.transform.position += new Vector3(0, 0.05f, 0);
 
         StartCoroutine(performTelpo(destnation));
     }
@@ -234,7 +234,7 @@ public class MoveComponent : MonoBehaviour
             renderer.enabled = false;
         }
 
-        while(Vector3.Distance(transform.position, dest) > 0.01f) // 만약 목적지에 근접하면 코루틴 탈출
+        while(Vector3.Distance(transform.position, dest) > 0.05f) // 만약 목적지에 근접하면 코루틴 탈출
         {
             //자기위치, 목표위치, 이동속도 줘서 자기위치에 넣어줌(이동)
             transform.position = Vector3.MoveTowards(transform.position, dest, 10.0f * Time.deltaTime); // moveToward를 통해서 위치를 얻은걸로 이동
@@ -250,7 +250,11 @@ public class MoveComponent : MonoBehaviour
 
         
         animator.SetTrigger("ReturnToBlendTree");
-        Move();
+
+        animator.SetFloat("SpeedX", 0);
+        animator.SetFloat("SpeedY", 0);
+        Invoke("Move", 1.0f);
+        //Move();
         End_Evade();
         sensitivity = 30f;
     }

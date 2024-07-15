@@ -21,7 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Aura_01
-  m_Shader: {fileID: -6465566751694194690, guid: 890dfa97271f71246b741d3906eb8415, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 890dfa97271f71246b741d3906eb8415,
+    type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -138,7 +139,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0, g: 0.7069087, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.23750053, b: 0, a: 1}
     - _DistortionScrollXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FlowTiling: {r: 1, g: 1, b: 0, a: 0}
