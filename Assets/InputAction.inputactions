@@ -15,6 +15,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "271dd8b8-a6c6-4875-8788-002d8b441bd1",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Run",
                     "type": "Button",
                     "id": "01cafc29-e7ba-4c08-be8d-687a8466aefa",
@@ -150,6 +159,17 @@
                     "action": "Staff",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac1ff1cf-3bd4-44af-835f-a35b5a3c98a8",
+                    "path": "Mouse/Delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Popo",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
@@ -161,6 +181,11 @@
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
                     "isOptional": false,
                     "isOR": false
                 }

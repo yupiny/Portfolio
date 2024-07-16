@@ -22,14 +22,28 @@ public class MoveComponent : MonoBehaviour
     [SerializeField]
     private float deadZone = 0.001f;
 
+    [SerializeField]
+    private string followTargetName = "FollowTarget";
+
+    [SerializeField]
+    private Vector2 mouseSensitivity = new Vector2(0.5f, 0.5f); //마우스의 속도
+
+    [SerializeField]
+    private Vector2 limitPitchAngle = new Vector2(20, 340);
+
+    [SerializeField]
+    private float mouseRotationLerp = 0.25f; //보간 값
+
     private bool bCanMove = true;
     private Animator animator;
+
+    private bool bRun;
 
     private Vector2 inputMove;
     public Vector2 MoveValue { get => inputMove; }
     private Vector2 currInputMove;
-    private bool bRun;
-    private Vector2 velocity;
+
+    private Vector2 inputLook;
 
     private WeaponComponent weapon;
     private StateComponent state;
@@ -41,15 +55,27 @@ public class MoveComponent : MonoBehaviour
     /// <summary>
     /// Evade시 변경된 회전 값을 복구하기 위한 prev 값 저장
     /// </summary>
-    private Quaternion? evadeRotation = null;
+    //private Quaternion? evadeRotation = null;
+
+    private Transform followTargetTransform;
     private void Awake()
     {
         animator = GetComponent<Animator>();
         weapon = GetComponent<WeaponComponent>();
+
+        state = GetComponent<StateComponent>();
+        state.OnStateTypeChanged += OnStateTypeChanged;
+
+        Awake_BindPlayerInput();
+    }
+
+    private void Awake_BindPlayerInput()
+    {   
         // 1. PlayerInput 컴포넌트를 가져오기
         // 2. PlayerInput 컴포넌트의 ActionMap 가져오기
         // 3. ActionMap에서 Binding한 것 가져오기
         // 4. Bind의 event에 메서드 연결하기
+
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
@@ -57,12 +83,13 @@ public class MoveComponent : MonoBehaviour
         moveAction.performed += Input_Move_Performed;
         moveAction.canceled += Input_Move_Cancled;
 
+        InputAction lookAction = actionMap.FindAction("Look");
+        lookAction.performed += Input_Look_Performed;
+        lookAction.canceled += Input_Look_Cancled;
+
         InputAction runAction = actionMap.FindAction("Run");
         runAction.started += Input_Run_Started;
         runAction.canceled += Input_Run_Cancled;
-
-        state = GetComponent<StateComponent>();
-        state.OnStateTypeChanged += OnStateTypeChanged;
     }
 
     public void Move()
@@ -94,12 +121,58 @@ public class MoveComponent : MonoBehaviour
         bRun = false;
     }
 
+    private void Input_Look_Performed(InputAction.CallbackContext context)
+    {
+        inputLook = context.ReadValue<Vector2>();
+    }
+
+    private void Input_Look_Cancled(InputAction.CallbackContext context)
+    {
+        inputLook = Vector2.zero;
+    }
+
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        followTargetTransform = transform.FindChildByName(followTargetName);
+    }
+
+    private Vector2 velocity;
+    private Quaternion rotation;
     private void Update()
     {
         currInputMove = Vector2.SmoothDamp(currInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
         if (bCanMove == false)
             return;
+
+
+        rotation *= Quaternion.AngleAxis(inputLook.x * mouseSensitivity.x, Vector3.up); //x방향회전
+        rotation *= Quaternion.AngleAxis(-inputLook.y * mouseSensitivity.y, Vector3.right); //y방향회전
+        followTargetTransform.rotation = rotation;
+
+        Vector3 angles = followTargetTransform.localEulerAngles;
+        angles.z = 0.0f;
+
+        // 회전 각 제한
+        float xAngle = followTargetTransform.localEulerAngles.x;
+
+        // 180도면 짐벌락 걸릴 가능성있어서 배제
+        if (xAngle < 180.0f && xAngle > limitPitchAngle.x)
+            angles.x = limitPitchAngle.x;
+        else if (xAngle > 180.0f && xAngle < limitPitchAngle.y)
+            angles.x = limitPitchAngle.y;
+
+        followTargetTransform.localEulerAngles = angles;
+
+        // 부드러운 화면 전환을 위한 보정
+        rotation = Quaternion.Lerp(followTargetTransform.rotation, rotation, mouseRotationLerp * Time.deltaTime);
+
+        transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+        followTargetTransform.localEulerAngles = new Vector3(angles.x, 0, 0);
+
 
         Vector3 direction = Vector3.zero;
 
@@ -167,13 +240,13 @@ public class MoveComponent : MonoBehaviour
             telpoDirection = EvadeDirection.Forward;
             if (value.x < 0.0f) //왼쪽 앞 대각선
             {
-                evadeRotation = transform.rotation;
+                //evadeRotation = transform.rotation;
                 //transform.Rotate(Vector3.up, -45.0f);
                 telpoDirection = EvadeDirection.forwardLeft;
             }
             else if (value.x > 0.0f) //오른쪽 앞 대각선
             {
-                evadeRotation = transform.rotation;
+                //evadeRotation = transform.rotation;
                 //transform.Rotate(Vector3.up, 45.0f);
                 telpoDirection = EvadeDirection.forwardRight;
             }
@@ -184,13 +257,13 @@ public class MoveComponent : MonoBehaviour
             telpoDirection = EvadeDirection.Backward;
             if (value.x < 0.0f) //왼쪽 뒤 대각선
             {
-                evadeRotation = transform.rotation;
+                //evadeRotation = transform.rotation;
                 //transform.Rotate(Vector3.up, 45.0f);
                 telpoDirection = EvadeDirection.backwardLeft;
             }
             else if (value.x > 0.0f) //오른쪽 뒤 대각선
             {
-                evadeRotation = transform.rotation;
+                //evadeRotation = transform.rotation;
                 //transform.Rotate(Vector3.up, -45.0f);
                 telpoDirection = EvadeDirection.backwardRight;
             }
@@ -293,31 +366,31 @@ public class MoveComponent : MonoBehaviour
     }
     private void End_Evade()
     {
-        if (evadeRotation.HasValue)
-            StartCoroutine(Reset_EvadeRotation());
+        //if (evadeRotation.HasValue)
+        //    StartCoroutine(Reset_EvadeRotation());
 
         state.SetIdleMode();
     }
 
-    private IEnumerator Reset_EvadeRotation()
-    {
-        float delta = 0.0f;
+    //private IEnumerator Reset_EvadeRotation()
+    //{
+    //    float delta = 0.0f;
 
-        while (true)
-        {
-            float angle = Quaternion.Angle(transform.rotation, evadeRotation.Value);
-            if (angle < 2.0f)
-                break;
+    //    while (true)
+    //    {
+    //        float angle = Quaternion.Angle(transform.rotation, evadeRotation.Value);
+    //        if (angle < 2.0f)
+    //            break;
 
-            delta += Time.deltaTime * 50f;
-            Quaternion rotate = Quaternion.RotateTowards(transform.rotation, evadeRotation.Value, delta);
-            transform.rotation = rotate;
+    //        delta += Time.deltaTime * 50f;
+    //        Quaternion rotate = Quaternion.RotateTowards(transform.rotation, evadeRotation.Value, delta);
+    //        transform.rotation = rotate;
 
-            yield return new WaitForFixedUpdate();
-        }
+    //        yield return new WaitForFixedUpdate();
+    //    }
 
-        transform.rotation = evadeRotation.Value;
-    }
+    //    transform.rotation = evadeRotation.Value;
+    //}
 
     private void OnGUI()
     {

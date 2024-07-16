@@ -401,6 +401,37 @@ Transform:
   m_Father: {fileID: 8510382467065965873}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1322705969918348832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3860963825808996600}
+  m_Layer: 0
+  m_Name: FollowTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3860963825808996600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322705969918348832}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7216959649009390825}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1603083243168283537
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,6 +2314,7 @@ Transform:
   - {fileID: 4743440856126543814}
   - {fileID: 2915966808781894781}
   - {fileID: 2110869437}
+  - {fileID: 3860963825808996600}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2321,9 +2353,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 2
   runSpeed: 4
-  sensitivity: 10
+  sensitivity: 30
   deadZone: 0.001
-  TelpoEffect: {fileID: 0}
+  TelpoEffect: {fileID: 4925974917851401304, guid: ad276d981dc41d54bb8d941bcef064a9, type: 3}
   telpoDistance: 5
 --- !u!114 &1449891374076414183
 MonoBehaviour:
