@@ -31,6 +31,7 @@ public class MoveComponent : MonoBehaviour
     private bool bRun;
     private Vector2 velocity;
 
+    private WeaponComponent weapon;
     private StateComponent state;
     private Renderer[] renderers; //캐릭터 메쉬배열로 저장
 
@@ -44,7 +45,7 @@ public class MoveComponent : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-
+        weapon = GetComponent<WeaponComponent>();
         // 1. PlayerInput 컴포넌트를 가져오기
         // 2. PlayerInput 컴포넌트의 ActionMap 가져오기
         // 3. ActionMap에서 Binding한 것 가져오기
@@ -111,15 +112,15 @@ public class MoveComponent : MonoBehaviour
 
         transform.Translate(direction * Time.deltaTime);
 
-        //if (weapon.UnarmedMode)
-        //{
-            //animator.SetFloat("SpeedY", direction.magnitude);
+        if (weapon.UnarmedMode)
+        {
+            animator.SetFloat("SpeedY", direction.magnitude);
 
-        //    return;
-        // }
+            return;
+        }
 
-        animator.SetFloat("SpeedX", direction.x * speed);
-        animator.SetFloat("SpeedY", direction.z * speed);
+        animator.SetFloat("SpeedX", currInputMove.x * speed);
+        animator.SetFloat("SpeedY", currInputMove.y * speed);
     }
 
 
@@ -140,48 +141,58 @@ public class MoveComponent : MonoBehaviour
     {
         Vector2 value = MoveValue;
         EvadeDirection direction = EvadeDirection.Forward;
+        EvadeDirection telpoDirection = EvadeDirection.Forward;
 
         // 키 입력이 없는 경우
         if (value.y == 0.0f)
         {
             direction = EvadeDirection.Forward;
+            telpoDirection = EvadeDirection.Forward;
 
             if (value.x < 0.0f) //왼쪽
             {
                 direction = EvadeDirection.Left;
+                telpoDirection = EvadeDirection.Left;
             }
             else if (value.x > 0.0f) //오른쪽
             {
                 direction = EvadeDirection.Right;
+                telpoDirection = EvadeDirection.Right;
             }
         }
         // 앞 입력 시
         else if (value.y >= 0.0f)
         {
             direction = EvadeDirection.Forward;
+            telpoDirection = EvadeDirection.Forward;
             if (value.x < 0.0f) //왼쪽 앞 대각선
             {
                 evadeRotation = transform.rotation;
-                transform.Rotate(Vector3.up, -45.0f);
+                //transform.Rotate(Vector3.up, -45.0f);
+                telpoDirection = EvadeDirection.forwardLeft;
             }
             else if (value.x > 0.0f) //오른쪽 앞 대각선
             {
                 evadeRotation = transform.rotation;
-                transform.Rotate(Vector3.up, 45.0f);
+                //transform.Rotate(Vector3.up, 45.0f);
+                telpoDirection = EvadeDirection.forwardRight;
             }
         }
         else
         {
             direction = EvadeDirection.Backward;
+            telpoDirection = EvadeDirection.Backward;
             if (value.x < 0.0f) //왼쪽 뒤 대각선
             {
                 evadeRotation = transform.rotation;
-                transform.Rotate(Vector3.up, 45.0f);
+                //transform.Rotate(Vector3.up, 45.0f);
+                telpoDirection = EvadeDirection.backwardLeft;
             }
             else if (value.x > 0.0f) //오른쪽 뒤 대각선
             {
                 evadeRotation = transform.rotation;
-                transform.Rotate(Vector3.up, -45.0f);
+                //transform.Rotate(Vector3.up, -45.0f);
+                telpoDirection = EvadeDirection.backwardRight;
             }
         }
         animator.SetInteger("Direction", (int)direction);
@@ -190,29 +201,41 @@ public class MoveComponent : MonoBehaviour
         //만약 스태프라면
         if (animator.GetInteger("WeaponType") == (int)WeaponType.Staff)
         {
-            StaffEvade(direction);
+            StaffEvade(telpoDirection);
         }
     }
 
     [SerializeField]
     private float telpoDistance = 5.0f;
-    private void StaffEvade(EvadeDirection direction)
+    private void StaffEvade(EvadeDirection telpoDirection)
     {
         // 1. 방향 받았으니까, 목적지를 구한다
         // 0 : 앞, 1 : 뒤, 2: 왼쪽, 3: 오른쪽
         Vector3 destnation = transform.position;
 
-        if (direction == EvadeDirection.Forward)
+        if (telpoDirection == EvadeDirection.Forward)
             destnation += new Vector3(0, 0, +telpoDistance);
         
-        if (direction == EvadeDirection.Backward)
+        if (telpoDirection == EvadeDirection.Backward)
             destnation += new Vector3(0, 0, -telpoDistance);
 
-        if (direction == EvadeDirection.Right)
+        if (telpoDirection == EvadeDirection.Right)
             destnation += new Vector3(+telpoDistance, 0, 0);
 
-        if (direction == EvadeDirection.Left)
+        if (telpoDirection == EvadeDirection.Left)
             destnation += new Vector3(-telpoDistance, 0, 0);
+
+        if (telpoDirection == EvadeDirection.forwardLeft)
+            destnation += new Vector3(-4, 0, +4);
+
+        if (telpoDirection == EvadeDirection.forwardRight)
+            destnation += new Vector3(+4, 0, +4);
+
+        if (telpoDirection == EvadeDirection.backwardLeft)
+            destnation += new Vector3(-4, 0, -4);
+
+        if (telpoDirection == EvadeDirection.backwardRight)
+            destnation += new Vector3(+4, 0, -4);
 
         Vector3 playerPosition = transform.position;
         // 파티클 생성 코드 작성할 것 함수 X
@@ -226,7 +249,7 @@ public class MoveComponent : MonoBehaviour
     IEnumerator performTelpo(Vector3 dest)
     {
         sensitivity = 50f;
-        //yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
         renderers = GetComponentsInChildren<Renderer>();
         foreach(Renderer renderer in renderers)
         {   
@@ -237,7 +260,7 @@ public class MoveComponent : MonoBehaviour
         while(Vector3.Distance(transform.position, dest) > 0.05f) // 만약 목적지에 근접하면 코루틴 탈출
         {
             //자기위치, 목표위치, 이동속도 줘서 자기위치에 넣어줌(이동)
-            transform.position = Vector3.MoveTowards(transform.position, dest, 10.0f * Time.deltaTime); // moveToward를 통해서 위치를 얻은걸로 이동
+            transform.position = Vector3.MoveTowards(transform.position, dest, 100.0f * Time.deltaTime); // moveToward를 통해서 위치를 얻은걸로 이동
             yield return null; //1프레임 멈춤
         }
 
@@ -248,13 +271,16 @@ public class MoveComponent : MonoBehaviour
             renderer.enabled = true;
         }
 
-        
+
+        yield return new WaitForSeconds(0.3f);
+
         animator.SetTrigger("ReturnToBlendTree");
 
         animator.SetFloat("SpeedX", 0);
         animator.SetFloat("SpeedY", 0);
-        Invoke("Move", 1.0f);
-        //Move();
+        //Invoke("Move", 0.5f);
+        Move();
+        //Invoke("End_Evade", 0.5f);
         End_Evade();
         sensitivity = 30f;
     }
