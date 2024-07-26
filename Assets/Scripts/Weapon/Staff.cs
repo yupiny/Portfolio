@@ -37,4 +37,5 @@ public class Staff : Melee
 
         gameObject.SetActive(false);
     }
+
 }

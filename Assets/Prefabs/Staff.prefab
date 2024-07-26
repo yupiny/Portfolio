@@ -181,5 +181,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
-  doActionDatas: []
+  doActionDatas:
+  - bCanMove: 0
+    Power: 0
+    Distance: 0
+    StopFrame: 0
+    Particle: {fileID: 0}
+    ParticlePositionOffset: {x: 0, y: 0, z: 0}
+    ParticleScaleOffset: {x: 0, y: 0, z: 0}
+    HitImpactIndex: 0
+    HitParticle: {fileID: 0}
+    HitParticlePositionOffset: {x: 0, y: 0, z: 0}
+    HitParticleScaleOffset: {x: 0, y: 0, z: 0}
+  - bCanMove: 0
+    Power: 0
+    Distance: 0
+    StopFrame: 0
+    Particle: {fileID: 0}
+    ParticlePositionOffset: {x: 0, y: 0, z: 0}
+    ParticleScaleOffset: {x: 0, y: 0, z: 0}
+    HitImpactIndex: 0
+    HitParticle: {fileID: 0}
+    HitParticlePositionOffset: {x: 0, y: 0, z: 0}
+    HitParticleScaleOffset: {x: 0, y: 0, z: 0}
+  - bCanMove: 0
+    Power: 0
+    Distance: 0
+    StopFrame: 0
+    Particle: {fileID: 0}
+    ParticlePositionOffset: {x: 0, y: 0, z: 0}
+    ParticleScaleOffset: {x: 0, y: 0, z: 0}
+    HitImpactIndex: 0
+    HitParticle: {fileID: 0}
+    HitParticlePositionOffset: {x: 0, y: 0, z: 0}
+    HitParticleScaleOffset: {x: 0, y: 0, z: 0}
+  - bCanMove: 0
+    Power: 0
+    Distance: 0
+    StopFrame: 0
+    Particle: {fileID: 0}
+    ParticlePositionOffset: {x: 0, y: 0, z: 0}
+    ParticleScaleOffset: {x: 0, y: 0, z: 0}
+    HitImpactIndex: 0
+    HitParticle: {fileID: 0}
+    HitParticlePositionOffset: {x: 0, y: 0, z: 0}
+    HitParticleScaleOffset: {x: 0, y: 0, z: 0}
+  - bCanMove: 0
+    Power: 0
+    Distance: 0
+    StopFrame: 0
+    Particle: {fileID: 0}
+    ParticlePositionOffset: {x: 0, y: 0, z: 0}
+    ParticleScaleOffset: {x: 0, y: 0, z: 0}
+    HitImpactIndex: 0
+    HitParticle: {fileID: 0}
+    HitParticlePositionOffset: {x: 0, y: 0, z: 0}
+    HitParticleScaleOffset: {x: 0, y: 0, z: 0}
+  - bCanMove: 0
+    Power: 0
+    Distance: 0
+    StopFrame: 0
+    Particle: {fileID: 0}
+    ParticlePositionOffset: {x: 0, y: 0, z: 0}
+    ParticleScaleOffset: {x: 0, y: 0, z: 0}
+    HitImpactIndex: 0
+    HitParticle: {fileID: 0}
+    HitParticlePositionOffset: {x: 0, y: 0, z: 0}
+    HitParticleScaleOffset: {x: 0, y: 0, z: 0}
   staffHandName: Hand_Staff

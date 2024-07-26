@@ -97,6 +97,8 @@ public class Melee : Weapon
 
         index = 0;
         bEnable = false;
+
+        animator.ResetTrigger("NextCombo");
     }
 
     // 충돌이 발생했을 때 호출되는 메서드

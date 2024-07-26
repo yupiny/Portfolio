@@ -822,7 +822,35 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.08269757
+        functionName: Begin_Combo
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ca804c653c041ea4fa2bca8e001c1fff, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.50134706
+        functionName: End_Combo
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ca804c653c041ea4fa2bca8e001c1fff, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.99247164
+        functionName: End_DoAction
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ca804c653c041ea4fa2bca8e001c1fff, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.78378564
+        functionName: Begin_DoAction
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: ca804c653c041ea4fa2bca8e001c1fff, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
